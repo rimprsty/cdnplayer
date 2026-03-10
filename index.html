@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDN Player • Putar Video dari Link</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #0f0c1f 0%, #1a1730 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+        .player-card {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(18, 15, 35, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 2rem;
+            padding: 2rem 2rem 2.2rem;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(120, 90, 220, 0.2) inset;
+        }
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(120deg, #f0eaff, #cfbaff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        h1 span {
+            background: rgba(140, 100, 240, 0.25);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            color: #b7a5ff;
+            letter-spacing: 0.3px;
+            border: 1px solid #3d2e70;
+        }
+        .sub {
+            color: #8f85b3;
+            font-size: 0.95rem;
+            margin-bottom: 1.75rem;
+            border-left: 3px solid #5d4b9c;
+            padding-left: 1rem;
+        }
+        .input-section {
+            background: rgba(10, 8, 22, 0.6);
+            border-radius: 3rem;
+            display: flex;
+            align-items: center;
+            padding: 0.4rem 0.4rem 0.4rem 1.8rem;
+            border: 1px solid #322b4b;
+            transition: border 0.2s, box-shadow 0.2s;
+            margin-bottom: 2.5rem;
+        }
+        .input-section:focus-within {
+            border-color: #8b6ee8;
+            box-shadow: 0 0 0 3px rgba(139, 110, 232, 0.25);
+        }
+        .input-section i {
+            color: #6a5c99;
+            font-style: normal;
+            font-weight: 400;
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+        #videoUrl {
+            background: transparent;
+            border: none;
+            padding: 1rem 0;
+            width: 100%;
+            font-size: 1rem;
+            color: #ffffff;
+            outline: none;
+        }
+        #videoUrl::placeholder {
+            color: #4d426b;
+            font-weight: 300;
+            font-size: 0.95rem;
+        }
+        #playBtn {
+            background: #6d4fcf;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.9rem 2rem;
+            border-radius: 3rem;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.15s;
+            white-space: nowrap;
+            border: 1px solid #9577f0;
+            box-shadow: 0 8px 18px -6px #3d2e7e;
+        }
+        #playBtn:hover {
+            background: #7f62e3;
+            transform: scale(1.02);
+            border-color: #b29cff;
+        }
+        #playBtn:active {
+            transform: scale(0.98);
+            background: #5a40b0;
+        }
+        .video-wrapper {
+            background: #0b0816;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #30294a;
+            box-shadow: 0 25px 35px -12px black;
+            aspect-ratio: 16 / 9;
+            margin-bottom: 1.8rem;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            background: black;
+            outline: none;
+        }
+        .info-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #a59ac9;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .status {
+            background: #211d33;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            border-left: 2px solid #6d4fcf;
+            word-break: break-all;
+            flex: 1;
+        }
+        .status strong {
+            color: #cebfff;
+            font-weight: 500;
+            margin-right: 4px;
+        }
+        .status a {
+            color: #b7a5ff;
+            text-decoration: none;
+            border-bottom: 1px dotted #6a5c99;
+        }
+        .status a:hover {
+            color: white;
+            border-bottom-color: #b7a5ff;
+        }
+        .clear-btn {
+            background: none;
+            border: 1px solid #3d335b;
+            color: #ab9dd9;
+            padding: 0.4rem 1.3rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.15s;
+            font-weight: 500;
+        }
+        .clear-btn:hover {
+            background: #2f264b;
+            color: white;
+            border-color: #7f68cf;
+        }
+        .example-hint {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #6c6190;
+        }
+        .example-link {
+            background: #19152e;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            color: #b2a2e6;
+            cursor: pointer;
+            border: 1px solid #312951;
+            transition: 0.1s;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+        .example-link:hover {
+            background: #2e2550;
+            color: #ddd5ff;
+            border-color: #6f54c4;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 2.2rem;
+            font-size: 0.8rem;
+            color: #4c426b;
+            border-top: 1px dashed #2a2342;
+            padding-top: 1.2rem;
+        }
+        .footer-note a {
+            color: #7f6bb8;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-card">
+        <h1>
+            ⚡ CDN Player 
+            <span>allclde no comments</span>
+        </h1>
+        <div class="sub">tempel link video (mp4, webm, ogg) — langsung putar tanpa iklan</div>
+
+        <!-- input link -->
+        <div class="input-section">
+            <i>🔗</i>
+            <input type="url" id="videoUrl" placeholder="https://cdn.example.com/video.mp4" spellcheck="false" />
+            <button id="playBtn">▶ Putar / refresh</button>
+        </div>
+
+        <!-- area video -->
+        <div class="video-wrapper">
+            <video id="mainVideo" controls controlslist="nodownload" preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23110d26'/%3E%3Ctext x='20' y='55' font-family='system-ui, sans-serif' font-size='14' fill='%234a3e77'%3ECDN%3C/text%3E%3C/svg%3E">
+                <source src="" type="video/mp4" id="videoSource">
+                Maaf, browser kamu tidak mendukung video HTML5.
+            </video>
+        </div>
+
+        <!-- status bar + clear -->
+        <div class="info-bar">
+            <div class="status" id="statusText">
+                <strong>📀 status:</strong> <span id="statusMessage">masukkan link video</span>
+            </div>
+            <button class="clear-btn" id="clearBtn" title="reset pemutar">✕ bersihkan</button>
+        </div>
+
+        <!-- contoh link cepat (bisa dicoba) -->
+        <div class="example-hint">
+            <span style="color:#6f629b;">🎬 contoh CDN:</span>
+            <span class="example-link" data-demo="https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4">🐇 Big Buck (10s)</span>
+            <span class="example-link" data-demo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">🐘 Elephant dream</span>
+            <span class="example-link" data-demo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">🔥 bigger blazes</span>
+            <span class="example-link" data-demo="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4">🌕 blue moon (trailer)</span>
+        </div>
+        <div class="footer-note">
+            allclde no comments • taruh link langsung • video tidak disimpan
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const urlInput = document.getElementById('videoUrl');
+            const playBtn = document.getElementById('playBtn');
+            const mainVideo = document.getElementById('mainVideo');
+            const videoSource = document.getElementById('videoSource');
+            const statusMessage = document.getElementById('statusMessage');
+            const clearBtn = document.getElementById('clearBtn');
+            const exampleLinks = document.querySelectorAll('.example-link');
+
+            // fungsi update video
+            function loadVideoFromUrl(url) {
+                if (!url || url.trim() === '') {
+                    // kosongkan source
+                    videoSource.src = '';
+                    mainVideo.load();
+                    statusMessage.innerText = '⚠️ masukkan link video';
+                    return;
+                }
+
+                // trim dan cek validasi sederhana (harus http/https)
+                let trimmedUrl = url.trim();
+                if (!trimmedUrl.match(/^https?:\/\//i)) {
+                    statusMessage.innerText = '❌ link harus diawali http:// atau https://';
+                    return;
+                }
+
+                // coba tebak tipe dari ekstensi (opsional, fallback mp4)
+                let fileExt = trimmedUrl.split('.').pop().toLowerCase();
+                let mimeType = 'video/mp4'; // default
+                if (fileExt === 'webm') mimeType = 'video/webm';
+                else if (fileExt === 'ogg' || fileExt === 'ogv') mimeType = 'video/ogg';
+                else if (fileExt === 'mov') mimeType = 'video/quicktime';
+                else if (fileExt === 'mkv') mimeType = 'video/x-matroska'; // browser compatibility terbatas
+                // tetap set ke mp4 jika tidak dikenali
+
+                videoSource.src = trimmedUrl;
+                videoSource.type = mimeType;
+                mainVideo.load(); // reload video dengan sumber baru
+
+                // coba mainkan otomatis? tidak kita biarkan user pencet play (kebijakan browser)
+                statusMessage.innerHTML = `📡 memuat dari <a href="${trimmedUrl}" target="_blank" rel="noopener noreferrer">${trimmedUrl.substring(0, 50)}${trimmedUrl.length > 50 ? '…' : ''}</a>`;
+                
+                // event error handler (jika video gagal dimuat)
+                mainVideo.onerror = function() {
+                    let errorState = mainVideo.error;
+                    let message = '❌ gagal memuat video. ';
+                    if (errorState && errorState.message) message += errorState.message;
+                    else message += 'cek kembali link / CORS / ketersediaan.';
+                    statusMessage.innerText = message;
+                };
+
+                mainVideo.oncanplay = function() {
+                    statusMessage.innerHTML = `✅ siap diputar — <span style="color:#aad6aa;">${trimmedUrl.substring(0,45)}${trimmedUrl.length > 45 ? '..' : ''}</span>`;
+                };
+            }
+
+            // event tombol putar
+            playBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                loadVideoFromUrl(urlInput.value);
+            });
+
+            // tekan enter di input
+            urlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    loadVideoFromUrl(urlInput.value);
+                }
+            });
+
+            // tombol clear
+            clearBtn.addEventListener('click', function() {
+                urlInput.value = '';
+                videoSource.src = '';
+                mainVideo.load();
+                statusMessage.innerText = '⏸️ pemutar dikosongkan';
+                // reset poster tipis
+                mainVideo.poster = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23110d26'/%3E%3Ctext x='20' y='55' font-family='system-ui, sans-serif' font-size='14' fill='%234a3e77'%3ECDN%3C/text%3E%3C/svg%3E";
+            });
+
+            // klik contoh link
+            exampleLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const demoUrl = this.getAttribute('data-demo');
+                    if (demoUrl) {
+                        urlInput.value = demoUrl;
+                        loadVideoFromUrl(demoUrl);
+                    }
+                });
+            });
+
+            // inisialisasi: cek jika ada value dari load (misal sisa reload)
+            if (urlInput.value.trim() !== '') {
+                // tapi jangan auto load tanpa interaksi? lebih baik dimuat manual atau kita load pas halaman siap? 
+                // biarkan aman, user bisa klik putar. Tapi supaya menarik kita bisa beri contoh.
+                // kita set contoh pertama kalau kosong, tp jangan auto putar.
+                // default kasih contoh pertama di input, tapi tidak auto putar (biar user pencet)
+                if (!urlInput.value) {
+                    urlInput.value = 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4';
+                }
+                // status di update
+                statusMessage.innerText = '🔌 link sudah siap, klik ▶ putar';
+            } else {
+                // set contoh sebagai placeholder yang bisa diputar
+                urlInput.placeholder = 'https://cdn.example.com/video.mp4';
+                statusMessage.innerText = '✨ tempel link atau klik contoh di bawah';
+            }
+
+            // validasi saat input berubah (opsional)
+            urlInput.addEventListener('input', function() {
+                if (urlInput.value.trim() === '') {
+                    statusMessage.innerText = '⏳ masukkan link video';
+                } else {
+                    statusMessage.innerText = '👆 tekan tombol putar / enter';
+                }
+            });
+
+            // deteksi perubahan dari source (misal via klik contoh, kita sudah panggil loadVideoFromUrl)
+            // error handling tambahan untuk CORS/network
+            window.onload = function() {
+                // jika input memiliki value saat halaman dimuat (misal setelah refresh) jangan otomatis load
+                if (urlInput.value) {
+                    statusMessage.innerText = '📋 link tersedia, klik ▶ untuk memutar';
+                }
+            };
+        })();
+    </script>
+</body>
+</html>
