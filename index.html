@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CDN Player • Putar Video dari Link</title>
+    <title>Mp4 Player • Videy</title>
     <style>
         * {
             margin: 0;
@@ -11,125 +11,106 @@
             box-sizing: border-box;
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
         }
+        
         body {
-            background: linear-gradient(145deg, #0f0c1f 0%, #1a1730 100%);
+            background: #0a0a10;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1.5rem;
+            padding: 1.2rem;
         }
-        .player-card {
+        
+        .player-container {
             max-width: 1000px;
             width: 100%;
-            background: rgba(18, 15, 35, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 2rem;
-            padding: 2rem 2rem 2.2rem;
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(120, 90, 220, 0.2) inset;
+            background: #11131f;
+            border-radius: 32px;
+            padding: 2rem;
+            border: 1px solid #2a2e44;
+            box-shadow: 0 30px 50px #00000080;
         }
-        h1 {
-            font-size: 1.9rem;
-            font-weight: 600;
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
             letter-spacing: -0.02em;
-            background: linear-gradient(120deg, #f0eaff, #cfbaff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 0.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
-        h1 span {
-            background: rgba(140, 100, 240, 0.25);
-            font-size: 0.9rem;
-            font-weight: 500;
-            padding: 0.2rem 1rem;
-            border-radius: 40px;
-            color: #b7a5ff;
-            letter-spacing: 0.3px;
-            border: 1px solid #3d2e70;
-        }
-        .sub {
-            color: #8f85b3;
+        
+        .header p {
+            color: #8b91b5;
             font-size: 0.95rem;
-            margin-bottom: 1.75rem;
-            border-left: 3px solid #5d4b9c;
+            border-left: 4px solid #5a6093;
             padding-left: 1rem;
+            margin-bottom: 2rem;
         }
+        
         .input-section {
-            background: rgba(10, 8, 22, 0.6);
-            border-radius: 3rem;
+            background: #191e30;
+            border-radius: 60px;
             display: flex;
             align-items: center;
-            padding: 0.4rem 0.4rem 0.4rem 1.8rem;
-            border: 1px solid #322b4b;
-            transition: border 0.2s, box-shadow 0.2s;
-            margin-bottom: 2.5rem;
+            padding: 0.3rem 0.3rem 0.3rem 1.5rem;
+            border: 1px solid #363d60;
+            margin-bottom: 1.5rem;
         }
+        
         .input-section:focus-within {
-            border-color: #8b6ee8;
-            box-shadow: 0 0 0 3px rgba(139, 110, 232, 0.25);
+            border-color: #7a82c0;
+            box-shadow: 0 0 0 3px #363d60;
         }
-        .input-section i {
-            color: #6a5c99;
-            font-style: normal;
-            font-weight: 400;
-            margin-right: 0.5rem;
-            font-size: 1.1rem;
+        
+        .cdn-prefix {
+            color: #8b93c7;
+            font-size: 1rem;
+            font-weight: 500;
+            white-space: nowrap;
         }
-        #videoUrl {
+        
+        #videoCode {
             background: transparent;
             border: none;
-            padding: 1rem 0;
+            padding: 1rem 0.5rem;
             width: 100%;
             font-size: 1rem;
-            color: #ffffff;
+            color: white;
             outline: none;
         }
-        #videoUrl::placeholder {
-            color: #4d426b;
-            font-weight: 300;
-            font-size: 0.95rem;
+        
+        #videoCode::placeholder {
+            color: #51587e;
+            font-style: italic;
         }
+        
         #playBtn {
-            background: #6d4fcf;
+            background: #5a6191;
             border: none;
             color: white;
             font-weight: 600;
             padding: 0.9rem 2rem;
-            border-radius: 3rem;
+            border-radius: 60px;
             font-size: 1rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
             transition: 0.15s;
             white-space: nowrap;
-            border: 1px solid #9577f0;
-            box-shadow: 0 8px 18px -6px #3d2e7e;
+            border: 1px solid #868dd2;
         }
+        
         #playBtn:hover {
-            background: #7f62e3;
-            transform: scale(1.02);
-            border-color: #b29cff;
+            background: #6b72aa;
         }
-        #playBtn:active {
-            transform: scale(0.98);
-            background: #5a40b0;
-        }
+        
         .video-wrapper {
-            background: #0b0816;
+            background: #080b14;
             border-radius: 24px;
             overflow: hidden;
-            border: 1px solid #30294a;
-            box-shadow: 0 25px 35px -12px black;
+            border: 1px solid #333a57;
             aspect-ratio: 16 / 9;
-            margin-bottom: 1.8rem;
+            margin: 1.5rem 0;
         }
+        
         video {
             width: 100%;
             height: 100%;
@@ -137,263 +118,416 @@
             background: black;
             outline: none;
         }
-        .info-bar {
+        
+        .remote-control {
+            background: #151b2b;
+            border-radius: 60px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            border: 1px solid #3c4368;
+            margin-bottom: 1rem;
+        }
+        
+        .remote-group {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        
+        .remote-btn {
+            background: #262e4a;
+            border: 1px solid #4b5483;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.6rem 1.4rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.1s;
+            min-width: 60px;
+        }
+        
+        .remote-btn:hover {
+            background: #3a4470;
+            border-color: #7a84c4;
+        }
+        
+        .remote-btn.premium {
+            background: #4f5890;
+            border-color: #949de0;
+            font-weight: 600;
+        }
+        
+        .time-display {
+            color: #c5cbff;
+            font-size: 0.95rem;
+            background: #1f2640;
+            padding: 0.5rem 1.3rem;
+            border-radius: 40px;
+            border: 1px solid #4a5280;
+        }
+        
+        .seek-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .seek-bar {
+            flex: 1;
+            height: 8px;
+            background: #262e4a;
+            border-radius: 10px;
+            appearance: none;
+            cursor: pointer;
+        }
+        
+        .seek-bar::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #949de0;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        .time-label {
+            color: #aab2ea;
+            font-size: 0.9rem;
+            min-width: 45px;
+        }
+        
+        .status-area {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            color: #a59ac9;
+            color: #9ca4d5;
             font-size: 0.9rem;
-            margin-top: 0.5rem;
+            margin: 1rem 0;
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .status {
-            background: #211d33;
-            padding: 0.4rem 1.2rem;
-            border-radius: 40px;
-            border-left: 2px solid #6d4fcf;
+        
+        .status-text {
+            background: #1a2138;
+            padding: 0.5rem 1.3rem;
+            border-radius: 30px;
+            border-left: 4px solid #5f68a3;
             word-break: break-all;
             flex: 1;
         }
-        .status strong {
-            color: #cebfff;
+        
+        .status-text span {
+            color: #d1d9ff;
             font-weight: 500;
-            margin-right: 4px;
+            margin-right: 6px;
         }
-        .status a {
-            color: #b7a5ff;
-            text-decoration: none;
-            border-bottom: 1px dotted #6a5c99;
-        }
-        .status a:hover {
-            color: white;
-            border-bottom-color: #b7a5ff;
-        }
+        
         .clear-btn {
-            background: none;
-            border: 1px solid #3d335b;
-            color: #ab9dd9;
-            padding: 0.4rem 1.3rem;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: 0.15s;
-            font-weight: 500;
-        }
-        .clear-btn:hover {
-            background: #2f264b;
-            color: white;
-            border-color: #7f68cf;
-        }
-        .example-hint {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #6c6190;
-        }
-        .example-link {
-            background: #19152e;
-            padding: 0.3rem 1rem;
+            background: #262e4a;
+            border: 1px solid #4b5483;
+            color: #d1d9ff;
+            padding: 0.5rem 1.5rem;
             border-radius: 30px;
-            color: #b2a2e6;
             cursor: pointer;
-            border: 1px solid #312951;
+        }
+        
+        .clear-btn:hover {
+            background: #323d62;
+            color: white;
+        }
+        
+        .info-box {
+            background: #1a2138;
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            margin-top: 1rem;
+            border: 1px solid #3d4570;
+            color: #b0b9ec;
+            font-size: 0.9rem;
+        }
+        
+        .info-title {
+            color: #d1d9ff;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        .example-code {
+            display: inline-block;
+            background: #262e4a;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            margin: 0.3rem 0.3rem;
+            border: 1px solid #5a6395;
+            cursor: pointer;
             transition: 0.1s;
-            font-size: 0.85rem;
-            word-break: break-all;
         }
-        .example-link:hover {
-            background: #2e2550;
-            color: #ddd5ff;
-            border-color: #6f54c4;
+        
+        .example-code:hover {
+            background: #37416e;
+            color: white;
         }
-        .footer-note {
+        
+        .footer {
             text-align: center;
-            margin-top: 2.2rem;
+            margin-top: 2rem;
             font-size: 0.8rem;
-            color: #4c426b;
-            border-top: 1px dashed #2a2342;
+            color: #5b6390;
+            border-top: 1px dashed #2f3656;
             padding-top: 1.2rem;
-        }
-        .footer-note a {
-            color: #7f6bb8;
-            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div class="player-card">
-        <h1>
-            ⚡ CDN Player 
-            <span>allclde no comments</span>
-        </h1>
-        <div class="sub">tempel link video (mp4, webm, ogg) — langsung putar tanpa iklan</div>
-
-        <!-- input link -->
-        <div class="input-section">
-            <i>🔗</i>
-            <input type="url" id="videoUrl" placeholder="https://cdn.example.com/video.mp4" spellcheck="false" />
-            <button id="playBtn">▶ Putar / refresh</button>
+    <div class="player-container">
+        <div class="header">
+            <h1>Mp4 Player</h1>
+            <p>videy.co • input kode • remote kontrol • allcode no comments</p>
         </div>
 
-        <!-- area video -->
+        <div class="input-section">
+            <span class="cdn-prefix">cdn2.videy.co/</span>
+            <input type="text" id="videoCode" placeholder="masukkan kode videy (xxxxx)" spellcheck="false" />
+            <button id="playBtn">Putar</button>
+        </div>
+
         <div class="video-wrapper">
-            <video id="mainVideo" controls controlslist="nodownload" preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23110d26'/%3E%3Ctext x='20' y='55' font-family='system-ui, sans-serif' font-size='14' fill='%234a3e77'%3ECDN%3C/text%3E%3C/svg%3E">
+            <video id="mainVideo" controls controlslist="nodownload" preload="metadata">
                 <source src="" type="video/mp4" id="videoSource">
-                Maaf, browser kamu tidak mendukung video HTML5.
             </video>
         </div>
 
-        <!-- status bar + clear -->
-        <div class="info-bar">
-            <div class="status" id="statusText">
-                <strong>📀 status:</strong> <span id="statusMessage">masukkan link video</span>
+        <div class="remote-control">
+            <div class="remote-group">
+                <button class="remote-btn" id="rewind10s">-10s</button>
+                <button class="remote-btn" id="forward10s">+10s</button>
+                <button class="remote-btn" id="skipPrev">Prev</button>
+                <button class="remote-btn" id="skipNext">Next</button>
             </div>
-            <button class="clear-btn" id="clearBtn" title="reset pemutar">✕ bersihkan</button>
+            <div class="remote-group">
+                <button class="remote-btn premium" id="playPauseBtn">Pause</button>
+                <button class="remote-btn" id="volumeToggle">Mute</button>
+            </div>
+            <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
         </div>
 
-        <!-- contoh link cepat (bisa dicoba) -->
-        <div class="example-hint">
-            <span style="color:#6f629b;">🎬 contoh CDN:</span>
-            <span class="example-link" data-demo="https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4">🐇 Big Buck (10s)</span>
-            <span class="example-link" data-demo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4">🐘 Elephant dream</span>
-            <span class="example-link" data-demo="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4">🔥 bigger blazes</span>
-            <span class="example-link" data-demo="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4">🌕 blue moon (trailer)</span>
+        <div class="seek-bar-container">
+            <span class="time-label" id="currentTimeLabel">0:00</span>
+            <input type="range" class="seek-bar" id="seekBar" value="0" min="0" max="100" step="0.1">
+            <span class="time-label" id="durationLabel">0:00</span>
         </div>
-        <div class="footer-note">
-            allclde no comments • taruh link langsung • video tidak disimpan
+
+        <div class="status-area">
+            <div class="status-text">
+                <span>status:</span> <span id="statusMessage">masukkan kode videy</span>
+            </div>
+            <button class="clear-btn" id="clearBtn">bersihkan</button>
+        </div>
+
+        <div class="info-box">
+            <span class="info-title">📌 cara pakai:</span> cukup masukkan kode videy (contoh: 
+            <span class="example-code" data-code="123456">123456</span>, 
+            <span class="example-code" data-code="abcdef">abcdef</span>, 
+            <span class="example-code" data-code="xyz789">xyz789</span>
+            )<br>
+            <span style="color:#8f98d0; display:block; margin-top:8px;">akan otomatis jadi: cdn2.videy.co/kodeanda.mp4</span>
+        </div>
+
+        <div class="footer">
+            allcode no comments • input kode videy • remote skip 10s • mute/unmute
         </div>
     </div>
 
     <script>
         (function() {
-            const urlInput = document.getElementById('videoUrl');
+            const codeInput = document.getElementById('videoCode');
             const playBtn = document.getElementById('playBtn');
             const mainVideo = document.getElementById('mainVideo');
             const videoSource = document.getElementById('videoSource');
             const statusMessage = document.getElementById('statusMessage');
             const clearBtn = document.getElementById('clearBtn');
-            const exampleLinks = document.querySelectorAll('.example-link');
+            const exampleCodes = document.querySelectorAll('.example-code');
+            
+            const rewind10s = document.getElementById('rewind10s');
+            const forward10s = document.getElementById('forward10s');
+            const skipPrev = document.getElementById('skipPrev');
+            const skipNext = document.getElementById('skipNext');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const volumeToggle = document.getElementById('volumeToggle');
+            const seekBar = document.getElementById('seekBar');
+            const currentTimeLabel = document.getElementById('currentTimeLabel');
+            const durationLabel = document.getElementById('durationLabel');
+            const timeDisplay = document.getElementById('timeDisplay');
 
-            // fungsi update video
-            function loadVideoFromUrl(url) {
-                if (!url || url.trim() === '') {
-                    // kosongkan source
+            let isMuted = false;
+            let previousVolume = 1;
+
+            const baseUrl = 'https://cdn2.videy.co/';
+
+            function formatTime(seconds) {
+                if (isNaN(seconds) || seconds < 0) return '0:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return mins + ':' + (secs < 10 ? '0' : '') + secs;
+            }
+
+            function updateTimeDisplay() {
+                if (!mainVideo.duration) return;
+                
+                const current = mainVideo.currentTime || 0;
+                const duration = mainVideo.duration || 0;
+                
+                currentTimeLabel.textContent = formatTime(current);
+                durationLabel.textContent = formatTime(duration);
+                timeDisplay.textContent = formatTime(current) + ' / ' + formatTime(duration);
+                
+                if (duration > 0) {
+                    seekBar.value = (current / duration) * 100;
+                }
+            }
+
+            function buildFullUrl(code) {
+                let cleanCode = code.trim().replace(/\.mp4$/i, '');
+                if (!cleanCode) return '';
+                return baseUrl + cleanCode + '.mp4';
+            }
+
+            function loadVideoFromCode(code) {
+                if (!code || code.trim() === '') {
                     videoSource.src = '';
                     mainVideo.load();
-                    statusMessage.innerText = '⚠️ masukkan link video';
+                    statusMessage.innerText = 'masukkan kode videy';
                     return;
                 }
 
-                // trim dan cek validasi sederhana (harus http/https)
-                let trimmedUrl = url.trim();
-                if (!trimmedUrl.match(/^https?:\/\//i)) {
-                    statusMessage.innerText = '❌ link harus diawali http:// atau https://';
-                    return;
-                }
-
-                // coba tebak tipe dari ekstensi (opsional, fallback mp4)
-                let fileExt = trimmedUrl.split('.').pop().toLowerCase();
-                let mimeType = 'video/mp4'; // default
-                if (fileExt === 'webm') mimeType = 'video/webm';
-                else if (fileExt === 'ogg' || fileExt === 'ogv') mimeType = 'video/ogg';
-                else if (fileExt === 'mov') mimeType = 'video/quicktime';
-                else if (fileExt === 'mkv') mimeType = 'video/x-matroska'; // browser compatibility terbatas
-                // tetap set ke mp4 jika tidak dikenali
-
-                videoSource.src = trimmedUrl;
-                videoSource.type = mimeType;
-                mainVideo.load(); // reload video dengan sumber baru
-
-                // coba mainkan otomatis? tidak kita biarkan user pencet play (kebijakan browser)
-                statusMessage.innerHTML = `📡 memuat dari <a href="${trimmedUrl}" target="_blank" rel="noopener noreferrer">${trimmedUrl.substring(0, 50)}${trimmedUrl.length > 50 ? '…' : ''}</a>`;
+                let fullUrl = buildFullUrl(code);
                 
-                // event error handler (jika video gagal dimuat)
+                if (!fullUrl.match(/^https?:\/\//i)) {
+                    statusMessage.innerText = 'kode tidak valid';
+                    return;
+                }
+
+                videoSource.src = fullUrl;
+                videoSource.type = 'video/mp4';
+                mainVideo.load();
+                
+                statusMessage.innerHTML = 'memuat: cdn2.videy.co/' + code.trim() + '.mp4';
+
                 mainVideo.onerror = function() {
-                    let errorState = mainVideo.error;
-                    let message = '❌ gagal memuat video. ';
-                    if (errorState && errorState.message) message += errorState.message;
-                    else message += 'cek kembali link / CORS / ketersediaan.';
-                    statusMessage.innerText = message;
+                    statusMessage.innerText = 'gagal memuat video. cek kode';
                 };
 
                 mainVideo.oncanplay = function() {
-                    statusMessage.innerHTML = `✅ siap diputar — <span style="color:#aad6aa;">${trimmedUrl.substring(0,45)}${trimmedUrl.length > 45 ? '..' : ''}</span>`;
+                    statusMessage.innerHTML = 'siap diputar';
                 };
             }
 
-            // event tombol putar
-            playBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                loadVideoFromUrl(urlInput.value);
-            });
-
-            // tekan enter di input
-            urlInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    loadVideoFromUrl(urlInput.value);
+            mainVideo.addEventListener('timeupdate', updateTimeDisplay);
+            
+            mainVideo.addEventListener('loadedmetadata', function() {
+                if (mainVideo.duration) {
+                    durationLabel.textContent = formatTime(mainVideo.duration);
+                    timeDisplay.textContent = '0:00 / ' + formatTime(mainVideo.duration);
                 }
             });
 
-            // tombol clear
-            clearBtn.addEventListener('click', function() {
-                urlInput.value = '';
-                videoSource.src = '';
-                mainVideo.load();
-                statusMessage.innerText = '⏸️ pemutar dikosongkan';
-                // reset poster tipis
-                mainVideo.poster = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23110d26'/%3E%3Ctext x='20' y='55' font-family='system-ui, sans-serif' font-size='14' fill='%234a3e77'%3ECDN%3C/text%3E%3C/svg%3E";
+            mainVideo.addEventListener('play', function() {
+                playPauseBtn.innerHTML = 'Pause';
+            });
+            
+            mainVideo.addEventListener('pause', function() {
+                playPauseBtn.innerHTML = 'Play';
             });
 
-            // klik contoh link
-            exampleLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    const demoUrl = this.getAttribute('data-demo');
-                    if (demoUrl) {
-                        urlInput.value = demoUrl;
-                        loadVideoFromUrl(demoUrl);
+            seekBar.addEventListener('input', function() {
+                if (mainVideo.duration) {
+                    mainVideo.currentTime = (seekBar.value / 100) * mainVideo.duration;
+                }
+            });
+
+            rewind10s.addEventListener('click', function() {
+                mainVideo.currentTime = Math.max(0, mainVideo.currentTime - 10);
+            });
+
+            forward10s.addEventListener('click', function() {
+                mainVideo.currentTime = Math.min(mainVideo.duration, mainVideo.currentTime + 10);
+            });
+
+            skipPrev.addEventListener('click', function() {
+                mainVideo.currentTime = 0;
+                mainVideo.play();
+            });
+
+            skipNext.addEventListener('click', function() {
+                if (mainVideo.duration) {
+                    mainVideo.currentTime = mainVideo.duration - 5;
+                    mainVideo.play();
+                }
+            });
+
+            playPauseBtn.addEventListener('click', function() {
+                if (mainVideo.paused) {
+                    mainVideo.play();
+                } else {
+                    mainVideo.pause();
+                }
+            });
+
+            volumeToggle.addEventListener('click', function() {
+                if (isMuted) {
+                    mainVideo.volume = previousVolume;
+                    volumeToggle.innerHTML = 'Mute';
+                    isMuted = false;
+                } else {
+                    previousVolume = mainVideo.volume;
+                    mainVideo.volume = 0;
+                    volumeToggle.innerHTML = 'Unmute';
+                    isMuted = true;
+                }
+            });
+
+            playBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                loadVideoFromCode(codeInput.value);
+            });
+
+            codeInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    loadVideoFromCode(codeInput.value);
+                }
+            });
+
+            clearBtn.addEventListener('click', function() {
+                codeInput.value = '';
+                videoSource.src = '';
+                mainVideo.load();
+                statusMessage.innerText = 'pemutar dikosongkan';
+                currentTimeLabel.textContent = '0:00';
+                durationLabel.textContent = '0:00';
+                timeDisplay.textContent = '0:00 / 0:00';
+                seekBar.value = 0;
+            });
+
+            exampleCodes.forEach(item => {
+                item.addEventListener('click', function() {
+                    const code = this.getAttribute('data-code');
+                    if (code) {
+                        codeInput.value = code;
+                        loadVideoFromCode(code);
                     }
                 });
             });
 
-            // inisialisasi: cek jika ada value dari load (misal sisa reload)
-            if (urlInput.value.trim() !== '') {
-                // tapi jangan auto load tanpa interaksi? lebih baik dimuat manual atau kita load pas halaman siap? 
-                // biarkan aman, user bisa klik putar. Tapi supaya menarik kita bisa beri contoh.
-                // kita set contoh pertama kalau kosong, tp jangan auto putar.
-                // default kasih contoh pertama di input, tapi tidak auto putar (biar user pencet)
-                if (!urlInput.value) {
-                    urlInput.value = 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4';
-                }
-                // status di update
-                statusMessage.innerText = '🔌 link sudah siap, klik ▶ putar';
-            } else {
-                // set contoh sebagai placeholder yang bisa diputar
-                urlInput.placeholder = 'https://cdn.example.com/video.mp4';
-                statusMessage.innerText = '✨ tempel link atau klik contoh di bawah';
+            if (codeInput.value) {
+                statusMessage.innerText = 'klik putar untuk memulai';
             }
-
-            // validasi saat input berubah (opsional)
-            urlInput.addEventListener('input', function() {
-                if (urlInput.value.trim() === '') {
-                    statusMessage.innerText = '⏳ masukkan link video';
-                } else {
-                    statusMessage.innerText = '👆 tekan tombol putar / enter';
-                }
-            });
-
-            // deteksi perubahan dari source (misal via klik contoh, kita sudah panggil loadVideoFromUrl)
-            // error handling tambahan untuk CORS/network
-            window.onload = function() {
-                // jika input memiliki value saat halaman dimuat (misal setelah refresh) jangan otomatis load
-                if (urlInput.value) {
-                    statusMessage.innerText = '📋 link tersedia, klik ▶ untuk memutar';
-                }
-            };
         })();
     </script>
 </body>
