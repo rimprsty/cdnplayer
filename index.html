@@ -161,6 +161,14 @@
             border-color: #949de0;
             font-weight: 600;
         }
+
+        .download-btn {
+            background: #1f6d5a;
+            border: 1px solid #3db39e;
+        }
+        .download-btn:hover {
+            background: #2b917a;
+        }
         
         .time-display {
             color: #c5cbff;
@@ -313,6 +321,7 @@
             <div class="remote-group">
                 <button class="remote-btn premium" id="playPauseBtn">Pause</button>
                 <button class="remote-btn" id="volumeToggle">Mute</button>
+                <button class="remote-btn download-btn" id="downloadBtn">⬇ Download</button>
             </div>
             <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
         </div>
@@ -340,7 +349,7 @@
         </div>
 
         <div class="footer">
-            allcode no comments • input kode videy • remote skip 10s • mute/unmute
+            allcode no comments • input kode videy • remote skip 10s • mute/unmute • download video
         </div>
     </div>
 
@@ -360,6 +369,7 @@
             const skipNext = document.getElementById('skipNext');
             const playPauseBtn = document.getElementById('playPauseBtn');
             const volumeToggle = document.getElementById('volumeToggle');
+            const downloadBtn = document.getElementById('downloadBtn');
             const seekBar = document.getElementById('seekBar');
             const currentTimeLabel = document.getElementById('currentTimeLabel');
             const durationLabel = document.getElementById('durationLabel');
@@ -490,6 +500,26 @@
                     volumeToggle.innerHTML = 'Unmute';
                     isMuted = true;
                 }
+            });
+
+            downloadBtn.addEventListener('click', function() {
+                const rawCode = codeInput.value.trim();
+                if (!rawCode) {
+                    statusMessage.innerText = 'masukkan kode videy dulu';
+                    return;
+                }
+                const downloadUrl = buildFullUrl(rawCode);
+                if (!downloadUrl) {
+                    statusMessage.innerText = 'kode tidak valid';
+                    return;
+                }
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = 'videy_' + rawCode + '.mp4';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                statusMessage.innerText = 'mencoba download: ' + rawCode + '.mp4';
             });
 
             playBtn.addEventListener('click', function(e) {
